@@ -11,15 +11,21 @@ body {
 
 #contenedorMesas {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 30px; /* Separar los pisos */
 }
 
 .piso {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: center;
+}
+
+.piso-titulo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .fila {
@@ -44,4 +50,3 @@ body {
 .mesa.ocupada {
   background-color: red; /* Mesa ocupada */
 }
-
