@@ -24,4 +24,101 @@
       const contenedor = document.getElementById("contenedorMesas");
       const pisos = 2;
       const mesasPorPiso = 10;
-      const mesasPorFila =
+      const mesasPorFila = 5; // 5 mesas por fila
+
+      for (let piso = 1; piso <= pisos; piso++) {
+        const pisoContenedor = document.createElement("div");
+        pisoContenedor.classList.add("piso");
+        contenedor.appendChild(pisoContenedor);
+
+        for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
+          const filaContenedor = document.createElement("div");
+          filaContenedor.classList.add("fila");
+          pisoContenedor.appendChild(filaContenedor);
+
+          for (let mesa = 1; mesa <= mesasPorFila; mesa++) {
+            const numeroFormateado = (fila * mesasPorFila + mesa).toString().padStart(2, '0');
+            const id = `piso${piso}-mesa${numeroFormateado}`;
+            const mesaRef = doc(db, "mesas", id);
+            const mesaDoc = await getDoc(mesaRef);
+            const estado = mesaDoc.exists() ? mesaDoc.data().estado : "libre"; // Si no existe, ponemos "libre"
+
+            const mesaElemento = document.createElement("div");
+            mesaElemento.classList.add("mesa");
+            mesaElemento.innerText = `Mesa ${numeroFormateado}`;
+
+            // Cambia el color dependiendo del estado
+            if (estado === "ocupada") {
+              mesaElemento.classList.add("ocupada");
+            }
+
+            filaContenedor.appendChild(mesaElemento);
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    #contenedorMesas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .piso {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .fila {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .mesa {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      font-size: 16px;
+      color: white;
+      background-color: green; /* Mesa libre por defecto */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .mesa.ocupada {
+      background-color: red; /* Mesa ocupada */
+    }
+
+    .mesa:hover {
+      transform: scale(1.1);
+    }
+
+    .mesa:active {
+      transform: scale(1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Estado de las Mesas</h1>
+  <div id="contenedorMesas"></div>
+</body>
+</html>
