@@ -1,25 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estado de Mesas por Piso</title>
-  <link rel="stylesheet" href="estilos.css" />
-  <script type="module" src="script.js" defer></script>
-</head>
-<body>
-  <h1>Estado de las Mesas</h1>
+const pisos = 2;
+const mesasPorPiso = 10;
+const mesasPorFila = 5; // 5 mesas por fila
 
-  <div id="contenedorPisos">
-    <section id="piso1">
-      <h2>Piso 1</h2>
-      <div class="contenedorMesas" data-piso="piso1"></div>
-    </section>
+for (let piso = 1; piso <= pisos; piso++) {
+  const pisoContenedor = document.createElement("div");
+  pisoContenedor.classList.add("piso");
+  contenedor.appendChild(pisoContenedor);
 
-    <section id="piso2">
-      <h2>Piso 2</h2>
-      <div class="contenedorMesas" data-piso="piso2"></div>
-    </section>
-  </div>
-</body>
-</html>
+  for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
+    const filaContenedor = document.createElement("div");
+    filaContenedor.classList.add("fila");
+    pisoContenedor.appendChild(filaContenedor);
+
+    for (let mesa = 1; mesa <= mesasPorFila; mesa++) {
+      const numeroFormateado = (fila * mesasPorFila + mesa).toString().padStart(2, '0');
+      const id = `piso${piso}-mesa${numeroFormateado}`;
+
+      const mesaElemento = document.createElement("div");
+      mesaElemento.classList.add("mesa");
+      mesaElemento.innerText = `Mesa ${numeroFormateado}`;
+      filaContenedor.appendChild(mesaElemento);
+
+      await setDoc(doc(db, "mesas", id), { estado: "libre" });
+      console.log(`Mesa creada: ${id}`);
+    }
+  }
+}
