@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activar o Liberar Mesa</title>
+  <title>Gestionar Mesa</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
@@ -20,61 +20,38 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.onload = function() {
-      const params = new URLSearchParams(window.location.search);
-      const mesaId = params.get('id');  // Obtiene el id de la mesa desde la URL
+    // Espera que se cargue la página y ejecute el código
+    window.onload = async function() {
+      // Obtiene el parámetro 'id' de la URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const mesaId = urlParams.get('id');
+      const mesaRef = doc(db, "mesas", mesaId);
 
-      if (!mesaId) {
-        alert("No se encontró el parámetro 'id' en la URL.");
-        return;
-      }
+      // Obtiene el documento de la mesa en Firestore
+      const docSnapshot = await getDoc(mesaRef);
 
-      // Muestra el id de la mesa que se está manipulando
-      document.getElementById("mesaId").innerText = mesaId;
+      // Si la mesa existe
+      if (docSnapshot.exists()) {
+        const mesa = docSnapshot.data();
 
-      // Redirigir a activar o liberar dependiendo del enlace
-      document.getElementById("ocuparLink").href = `#`;
-      document.getElementById("liberarLink").href = `#`;
-
-      // Si es necesario ocupar la mesa
-      document.getElementById("ocuparLink").onclick = async function() {
-        await cambiarEstadoMesa(mesaId, "ocupada");
-      };
-
-      // Si es necesario liberar la mesa
-      document.getElementById("liberarLink").onclick = async function() {
-        await cambiarEstadoMesa(mesaId, "libre");
-      };
-    };
-
-    // Función para cambiar el estado de la mesa en Firestore
-    async function cambiarEstadoMesa(id, estado) {
-      const mesaRef = doc(db, "mesas", id);
-      try {
-        await setDoc(mesaRef, { estado: estado });
-        alert(`Mesa ${id} actualizada a ${estado}`);
-        // Redirige a la página principal con los estados actualizados
-        window.location.href = "https://xandelr.github.io/Take-pi/";
-      } catch (error) {
-        console.error("Error actualizando la mesa:", error);
-        alert("Hubo un error al cambiar el estado de la mesa.");
+        // Verifica si la mesa está libre o ocupada
+        if (mesa.estado === "libre") {
+          // Si está libre, la marca como ocupada
+          await setDoc(mesaRef, { estado: "ocupada" });
+          alert("¡Mesa ocupada!");
+        } else {
+          // Si está ocupada, la marca como libre
+          await setDoc(mesaRef, { estado: "libre" });
+          alert("¡Mesa liberada!");
+        }
+      } else {
+        console.log("La mesa no existe.");
       }
     }
   </script>
 </head>
 <body>
-  <h1>Activar o Liberar Mesa</h1>
-  <p>La mesa que estás manipulando es: <span id="mesaId"></span></p>
-
-  <!-- Enlace para activar (ocupar) la mesa -->
-  <a href="#" id="ocuparLink" style="text-decoration: none; color: green; font-size: 18px;">Ocupar Mesa</a>
-
-  <br><br>
-
-  <!-- Enlace para liberar la mesa -->
-  <a href="#" id="liberarLink" style="text-decoration: none; color: red; font-size: 18px;">Liberar Mesa</a>
-
-  <p>Al hacer clic en uno de los enlaces, cambiarás el estado de la mesa en la base de datos.</p>
+  <h1>Gestionando Mesa...</h1>
+  <p>Esperando que se cambie el estado de la mesa según el NFC.</p>
 </body>
 </html>
-
