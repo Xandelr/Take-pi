@@ -1,26 +1,33 @@
-/* Estilo general de la página */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   margin: 0;
   flex-direction: column;
+  background-color: #f0f0f0;
 }
 
-/* Contenedor de mesas */
 #contenedorMesas {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 20px; /* Espacio entre las mesas */
-  padding: 20px;
+  gap: 20px;
 }
 
-/* Estilo individual para cada mesa */
+.piso {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fila {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 .mesa {
   width: 100px;
   height: 100px;
@@ -30,19 +37,9 @@ body {
   border-radius: 10px;
   font-size: 16px;
   color: white;
-  background-color: green; /* Por defecto, mesas libres */
-  cursor: pointer;
-  transition: background-color 0.3s;
+  background-color: green; /* Mesa libre */
 }
 
 .mesa.ocupada {
-  background-color: red; /* Mesas ocupadas */
-}
-
-.mesa:hover {
-  transform: scale(1.1);
-}
-
-.mesa:active {
-  transform: scale(1);
+  background-color: red; /* Mesa ocupada */
 }
