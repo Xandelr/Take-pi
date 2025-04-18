@@ -16,8 +16,22 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* Espacio entre las mesas */
+  gap: 40px; /* Espacio entre los pisos */
   padding: 20px;
+}
+
+/* Estilo de cada piso */
+.piso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Espacio entre las filas dentro del piso */
+}
+
+/* Estilo de cada fila dentro del piso */
+.fila {
+  display: flex;
+  gap: 10px; /* Espacio entre las mesas en la fila */
 }
 
 /* Estilo individual para cada mesa */
