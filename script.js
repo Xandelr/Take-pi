@@ -15,8 +15,8 @@ const db = getFirestore(app);
 
 window.onload = async function() {
   const contenedor = document.getElementById("contenedorMesas");
-  const pisos = 2; // Definir la cantidad de pisos
-  const mesasPorPiso = 10; // 10 mesas por piso
+  const pisos = 2; // 2 pisos
+  const mesasPorPiso = 10; // 10 mesas por piso (2 filas de 5)
   const mesasPorFila = 5; // 5 mesas por fila
 
   // Creamos las mesas por piso
@@ -60,3 +60,4 @@ window.onload = async function() {
     contenedor.appendChild(pisoContenedor);
   }
 }
+
