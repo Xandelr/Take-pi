@@ -1,52 +1,70 @@
+/* Estilo general de la página */
 body {
   font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   margin: 0;
   flex-direction: column;
-  background-color: #f0f0f0;
 }
 
+/* Contenedor principal de las mesas */
 #contenedorMesas {
+  width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 40px; /* Separación entre los pisos */
+  gap: 20px;
+  padding: 20px;
 }
 
+/* Cada piso tendrá un contenedor específico */
 .piso {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  align-items: center;
+  border: 2px solid #333;
+  padding: 10px;
 }
 
-.piso-titulo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+/* Título para cada piso */
+.piso h2 {
+  text-align: center;
+  margin: 0;
 }
 
+/* Estilo de las filas dentro de un piso */
 .fila {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
+/* Estilo de cada mesa */
 .mesa {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   color: white;
-  background-color: green; /* Mesa libre por defecto */
-  cursor: default; /* Deshabilita clics */
+  background-color: green;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .mesa.ocupada {
-  background-color: red; /* Mesa ocupada */
+  background-color: red;
 }
+
+.mesa:hover {
+  transform: scale(1.1);
+}
+
+.mesa:active {
+  transform: scale(1);
+}
+
