@@ -15,9 +15,9 @@ const db = getFirestore(app);
 
 window.onload = async function() {
   const contenedor = document.getElementById("contenedorMesas");
-  const pisos = 2;
-  const mesasPorPiso = 10;
-  const mesasPorFila = 5;
+  const pisos = 2; // Definir la cantidad de pisos
+  const mesasPorPiso = 10; // 10 mesas por piso
+  const mesasPorFila = 5; // 5 mesas por fila
 
   // Creamos las mesas por piso
   for (let piso = 1; piso <= pisos; piso++) {
@@ -30,8 +30,7 @@ window.onload = async function() {
     tituloPiso.innerText = `Piso ${piso}`;
     pisoContenedor.appendChild(tituloPiso);
 
-    contenedor.appendChild(pisoContenedor);
-
+    // Crear las filas y las mesas dentro de cada piso
     for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
@@ -48,6 +47,7 @@ window.onload = async function() {
         mesaElemento.classList.add("mesa");
         mesaElemento.innerText = `Mesa ${numeroFormateado}`;
 
+        // Cambiar el color de la mesa si está ocupada
         if (estado === "ocupada") {
           mesaElemento.classList.add("ocupada");
         }
@@ -55,5 +55,8 @@ window.onload = async function() {
         filaContenedor.appendChild(mesaElemento);
       }
     }
+
+    // Agregar el piso al contenedor principal
+    contenedor.appendChild(pisoContenedor);
   }
 }
