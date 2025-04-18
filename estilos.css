@@ -13,25 +13,23 @@ body {
 /* Contenedor de mesas */
 #contenedorMesas {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 40px; /* Espacio entre los pisos */
+  gap: 20px;
   padding: 20px;
 }
 
-/* Estilo de cada piso */
+/* Contenedor de cada piso */
 .piso {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px; /* Espacio entre las filas dentro del piso */
+  gap: 20px;
 }
 
-/* Estilo de cada fila dentro del piso */
+/* Contenedor de cada fila */
 .fila {
   display: flex;
-  gap: 10px; /* Espacio entre las mesas en la fila */
+  gap: 20px;
 }
 
 /* Estilo individual para cada mesa */
