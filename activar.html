@@ -20,23 +20,29 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.onload = async function() {
+    window.onload = function() {
       const params = new URLSearchParams(window.location.search);
       const mesaId = params.get('id');  // Obtiene el id de la mesa desde la URL
-      if (mesaId) {
-        document.getElementById("mesaId").innerText = mesaId;
-      } else {
+
+      if (!mesaId) {
         alert("No se encontró el parámetro 'id' en la URL.");
         return;
       }
 
+      // Muestra el id de la mesa que se está manipulando
+      document.getElementById("mesaId").innerText = mesaId;
+
+      // Redirigir a activar o liberar dependiendo del enlace
+      document.getElementById("ocuparLink").href = `#`;
+      document.getElementById("liberarLink").href = `#`;
+
       // Si es necesario ocupar la mesa
-      document.getElementById("ocuparBtn").onclick = async function() {
+      document.getElementById("ocuparLink").onclick = async function() {
         await cambiarEstadoMesa(mesaId, "ocupada");
       };
 
       // Si es necesario liberar la mesa
-      document.getElementById("liberarBtn").onclick = async function() {
+      document.getElementById("liberarLink").onclick = async function() {
         await cambiarEstadoMesa(mesaId, "libre");
       };
     };
@@ -47,9 +53,11 @@
       try {
         await setDoc(mesaRef, { estado: estado });
         alert(`Mesa ${id} actualizada a ${estado}`);
-        window.location.href = "https://xandelr.github.io/Take-pi/"; // Redirige a la página principal de mesas
+        // Redirige a la página principal con los estados actualizados
+        window.location.href = "https://xandelr.github.io/Take-pi/";
       } catch (error) {
         console.error("Error actualizando la mesa:", error);
+        alert("Hubo un error al cambiar el estado de la mesa.");
       }
     }
   </script>
@@ -57,8 +65,16 @@
 <body>
   <h1>Activar o Liberar Mesa</h1>
   <p>La mesa que estás manipulando es: <span id="mesaId"></span></p>
-  <button id="ocuparBtn">Ocupar Mesa</button>
-  <button id="liberarBtn">Liberar Mesa</button>
-  <p>Al hacer clic en uno de los botones, cambiarás el estado de la mesa en la base de datos.</p>
+
+  <!-- Enlace para activar (ocupar) la mesa -->
+  <a href="#" id="ocuparLink" style="text-decoration: none; color: green; font-size: 18px;">Ocupar Mesa</a>
+
+  <br><br>
+
+  <!-- Enlace para liberar la mesa -->
+  <a href="#" id="liberarLink" style="text-decoration: none; color: red; font-size: 18px;">Liberar Mesa</a>
+
+  <p>Al hacer clic en uno de los enlaces, cambiarás el estado de la mesa en la base de datos.</p>
 </body>
 </html>
+
