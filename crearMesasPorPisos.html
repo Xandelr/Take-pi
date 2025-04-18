@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Mesas por Piso</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
+      authDomain: "takepi-314.firebaseapp.com",
+      projectId: "takepi-314",
+      storageBucket: "takepi-314.appspot.com",
+      messagingSenderId: "81758083824",
+      appId: "1:81758083824:web:1156ba4749288a73928035"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function crearMesas() {
+      const pisos = 2;
+      const mesasPorPiso = 10;
+
+      for (let piso = 1; piso <= pisos; piso++) {
+        for (let mesa = 1; mesa <= mesasPorPiso; mesa++) {
+          const numeroFormateado = mesa.toString().padStart(2, '0');
+          const id = `piso${piso}-mesa${numeroFormateado}`;
+          await setDoc(doc(db, "mesas", id), {
+            estado: "libre"
+          });
+          console.log(`Mesa creada: ${id}`);
+        }
+      }
+
+      alert("¡Mesas creadas correctamente!");
+    }
+
+    crearMesas();
+  </script>
+</head>
+<body>
+  <h1>Creando mesas por pisos...</h1>
+  <p>Revisa la consola y tu base de datos Firebase.</p>
+</body>
+</html>
