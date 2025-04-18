@@ -25,7 +25,7 @@ window.onload = async function() {
     pisoContenedor.classList.add("piso");
     contenedor.appendChild(pisoContenedor);
 
-    for (let fila = 0; fila < 2; fila++) {
+    for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
       pisoContenedor.appendChild(filaContenedor);
