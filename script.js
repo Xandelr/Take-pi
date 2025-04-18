@@ -23,6 +23,13 @@ window.onload = async function() {
   for (let piso = 1; piso <= pisos; piso++) {
     const pisoContenedor = document.createElement("div");
     pisoContenedor.classList.add("piso");
+
+    // Crear el título del piso
+    const tituloPiso = document.createElement("div");
+    tituloPiso.classList.add("piso-titulo");
+    tituloPiso.innerText = `Piso ${piso}`;
+    pisoContenedor.appendChild(tituloPiso);
+
     contenedor.appendChild(pisoContenedor);
 
     for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
