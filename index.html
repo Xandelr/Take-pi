@@ -3,12 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estado de Mesas</title>
+  <title>Estado de Mesas por Piso</title>
   <link rel="stylesheet" href="estilos.css" />
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
   <h1>Estado de las Mesas</h1>
-  <div id="contenedorMesas"></div>
+
+  <div id="contenedorPisos">
+    <section id="piso1">
+      <h2>Piso 1</h2>
+      <div class="contenedorMesas" data-piso="piso1"></div>
+    </section>
+
+    <section id="piso2">
+      <h2>Piso 2</h2>
+      <div class="contenedorMesas" data-piso="piso2"></div>
+    </section>
+  </div>
 </body>
 </html>
