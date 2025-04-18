@@ -4,13 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estado de las Mesas</title>
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="estilos.css" />
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
   <h1>Estado de las Mesas</h1>
   <div id="contenedorMesas"></div>
-</body>
-</html>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getFirestore, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
+      authDomain: "takepi-314.firebaseapp.com",
+      projectId: "takepi-314",
+      storageBucket: "takepi-314.appspot.com",
+      messagingSenderId: "81758083824",
+      appId: "1:81758083824:web:1156ba4749288a73928035"
+    };
 
+    const app
