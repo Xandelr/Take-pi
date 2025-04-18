@@ -12,7 +12,7 @@ body {
 #contenedorMesas {
   display: flex;
   flex-direction: column;
-  gap: 30px; /* Separar los pisos */
+  gap: 30px; /* Separación entre los pisos */
 }
 
 .piso {
