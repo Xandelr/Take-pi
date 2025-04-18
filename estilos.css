@@ -1,51 +1,48 @@
+/* Estilo general de la página */
 body {
-  font-family: sans-serif;
-  background-color: #f8f8f8;
-  padding: 20px;
-  text-align: center;
-}
-
-h1 {
-  margin-bottom: 30px;
-}
-
-.piso {
-  margin-bottom: 40px;
-}
-
-.piso h2 {
-  margin-bottom: 15px;
-  color: #333;
-  border-bottom: 2px solid #ccc;
-  display: inline-block;
-  padding-bottom: 5px;
-}
-
-.contenedorMesas {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.mesa {
-  width: 80px;
-  height: 80px;
-  border-radius: 10px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-height: 100vh;
+  margin: 0;
+  flex-direction: column;
 }
 
-.mesa.libre {
-  background-color: #90ee90;
-  color: #003300;
+/* Contenedor de mesas */
+#contenedorMesas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Espacio entre las mesas */
+  padding: 20px;
+}
+
+/* Estilo individual para cada mesa */
+.mesa {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: green; /* Por defecto, mesas libres */
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .mesa.ocupada {
-  background-color: #ff7f7f;
-  color: #660000;
+  background-color: red; /* Mesas ocupadas */
+}
+
+.mesa:hover {
+  transform: scale(1.1);
+}
+
+.mesa:active {
+  transform: scale(1);
 }
