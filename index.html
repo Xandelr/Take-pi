@@ -24,14 +24,15 @@
       const contenedor = document.getElementById("contenedorMesas");
       const pisos = 2;
       const mesasPorPiso = 10;
-      const mesasPorFila = 5; // 5 mesas por fila
+      const mesasPorFila = 5;
 
+      // Creamos las mesas por piso
       for (let piso = 1; piso <= pisos; piso++) {
         const pisoContenedor = document.createElement("div");
         pisoContenedor.classList.add("piso");
         contenedor.appendChild(pisoContenedor);
 
-        for (let fila = 0; fila < 2; fila++) { // 2 filas por piso
+        for (let fila = 0; fila < 2; fila++) {
           const filaContenedor = document.createElement("div");
           filaContenedor.classList.add("fila");
           pisoContenedor.appendChild(filaContenedor);
@@ -41,13 +42,12 @@
             const id = `piso${piso}-mesa${numeroFormateado}`;
             const mesaRef = doc(db, "mesas", id);
             const mesaDoc = await getDoc(mesaRef);
-            const estado = mesaDoc.exists() ? mesaDoc.data().estado : "libre"; // Si no existe, ponemos "libre"
+            const estado = mesaDoc.exists() ? mesaDoc.data().estado : "libre";
 
             const mesaElemento = document.createElement("div");
             mesaElemento.classList.add("mesa");
             mesaElemento.innerText = `Mesa ${numeroFormateado}`;
 
-            // Cambia el color dependiendo del estado
             if (estado === "ocupada") {
               mesaElemento.classList.add("ocupada");
             }
@@ -61,13 +61,13 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
       flex-direction: column;
+      background-color: #f0f0f0;
     }
 
     #contenedorMesas {
@@ -75,7 +75,6 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      padding: 20px;
     }
 
     .piso {
@@ -99,21 +98,11 @@
       border-radius: 10px;
       font-size: 16px;
       color: white;
-      background-color: green; /* Mesa libre por defecto */
-      cursor: pointer;
-      transition: background-color 0.3s;
+      background-color: green; /* Mesa libre */
     }
 
     .mesa.ocupada {
       background-color: red; /* Mesa ocupada */
-    }
-
-    .mesa:hover {
-      transform: scale(1.1);
-    }
-
-    .mesa:active {
-      transform: scale(1);
     }
   </style>
 </head>
