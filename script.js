@@ -5,7 +5,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
   authDomain: "takepi-314.firebaseapp.com",
   projectId: "takepi-314",
-  storageBucket: "takepi-314.firebasestorage.app",
+  storageBucket: "takepi-314.appspot.com",
   messagingSenderId: "81758083824",
   appId: "1:81758083824:web:1156ba4749288a73928035"
 };
@@ -13,15 +13,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const contenedor = document.getElementById("contenedorMesas");
-
+// Escuchar cambios en las mesas
 onSnapshot(collection(db, "mesas"), (snapshot) => {
-  contenedor.innerHTML = "";
+  // Limpiar todos los contenedores de piso
+  document.querySelectorAll('.contenedorMesas').forEach(div => div.innerHTML = '');
+
   snapshot.forEach((doc) => {
+    const idMesa = doc.id;
     const estado = doc.data().estado;
-    const div = document.createElement("div");
-    div.className = `mesa ${estado}`;
-    div.innerText = doc.id;
-    contenedor.appendChild(div);
+    
+    // Separar piso y nombre de mesa desde el ID
+    const [piso, mesa] = idMesa.split('-'); // ej: piso1-mesa02 → ['piso1', 'mesa02']
+    
+    // Buscar el contenedor correspondiente a ese piso
+    const contenedor = document.querySelector(`.contenedorMesas[data-piso="${piso}"]`);
+    
+    if (contenedor) {
+      const divMesa = document.createElement("div");
+      divMesa.className = `mesa ${estado}`;
+      divMesa.innerText = mesa; // muestra solo 'mesa01', 'mesa02', etc.
+      contenedor.appendChild(divMesa);
+    }
   });
 });
