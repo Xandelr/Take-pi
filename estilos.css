@@ -12,7 +12,7 @@ body {
 #contenedorMesas {
   display: flex;
   flex-direction: column;
-  gap: 30px; /* Separación entre los pisos */
+  gap: 40px; /* Separación entre los pisos */
 }
 
 .piso {
@@ -43,8 +43,8 @@ body {
   border-radius: 10px;
   font-size: 16px;
   color: white;
-  background-color: green; /* Mesa libre */
-  cursor: default; /* Deshabilita el clic en la mesa */
+  background-color: green; /* Mesa libre por defecto */
+  cursor: default; /* Deshabilita clics */
 }
 
 .mesa.ocupada {
