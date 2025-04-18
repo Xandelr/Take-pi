@@ -10,24 +10,14 @@ body {
   flex-direction: column;
 }
 
-/* Contenedor de pisos */
-.piso {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
 /* Contenedor de mesas */
 #contenedorMesas {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* Contenedor de una fila de mesas */
-.fila {
-  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px; /* Espacio entre mesas */
+  align-items: center;
+  gap: 20px; /* Espacio entre las mesas */
+  padding: 20px;
 }
 
 /* Estilo individual para cada mesa */
@@ -40,7 +30,7 @@ body {
   border-radius: 10px;
   font-size: 16px;
   color: white;
-  background-color: green; /* Mesas libres por defecto */
+  background-color: green; /* Por defecto, mesas libres */
   cursor: pointer;
   transition: background-color 0.3s;
 }
