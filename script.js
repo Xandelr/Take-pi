@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -46,16 +46,16 @@ async function cargarMesas() {
         const mesaElemento = document.createElement("div");
         mesaElemento.classList.add("mesa");
         mesaElemento.innerText = `Mesa ${numeroMesa}`;
-        
+
         // Crear los enlaces para activar y liberar
         const activarLink = document.createElement("a");
         activarLink.href = `activar.html?id=${mesaId}`;
-        activarLink.innerText = "Activar";
+        activarLink.innerText = "Activar Mesa";
         activarLink.classList.add("link-activar");
 
         const liberarLink = document.createElement("a");
         liberarLink.href = `liberar.html?id=${mesaId}`;
-        liberarLink.innerText = "Liberar";
+        liberarLink.innerText = "Liberar Mesa";
         liberarLink.classList.add("link-liberar");
 
         // Añadir los enlaces debajo del nombre de la mesa
