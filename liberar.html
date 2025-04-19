@@ -22,22 +22,17 @@
 
     window.onload = async function() {
       const urlParams = new URLSearchParams(window.location.search);
-      const mesaId = urlParams.get('id');  // Obtiene el ID de la mesa desde la URL
+      const mesaId = urlParams.get('id');
+      const mesaRef = doc(db, "mesas", mesaId);
 
-      if (mesaId) {
-        const mesaRef = doc(db, "mesas", mesaId);
-
-        // Cambiar el estado de la mesa a "libre"
-        await setDoc(mesaRef, { estado: "libre" });
-        alert(`¡Mesa ${mesaId} liberada!`);
-      } else {
-        alert("No se especificó ninguna mesa en la URL.");
-      }
+      await setDoc(mesaRef, { estado: "libre" });
+      alert("¡Mesa liberada correctamente!");
+      window.location.href = "index.html"; // Redirige a la página principal para ver los cambios
     }
   </script>
 </head>
 <body>
   <h1>Liberando la mesa...</h1>
-  <p>Verifica el estado en la base de datos o recarga la página de las mesas.</p>
+  <p>Verifica el estado de la mesa en la página principal.</p>
 </body>
 </html>
