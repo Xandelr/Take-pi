@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ocupar Mesa</title>
+  <title>Activar Mesa</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
@@ -21,4 +21,18 @@
     const db = getFirestore(app);
 
     window.onload = async function() {
-      const urlParams = new URLSearch
+      const urlParams = new URLSearchParams(window.location.search);
+      const mesaId = urlParams.get('id');
+      const mesaRef = doc(db, "mesas", mesaId);
+
+      // Cambiar el estado de la mesa a "ocupada"
+      await setDoc(mesaRef, { estado: "ocupada" });
+      alert("¡Mesa ocupada!");
+    }
+  </script>
+</head>
+<body>
+  <h1>Activando la mesa...</h1>
+  <p>Verifica el estado en la base de datos o recarga la página de las mesas.</p>
+</body>
+</html>
