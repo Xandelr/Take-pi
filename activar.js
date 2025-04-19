@@ -15,14 +15,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Obtener el ID de la mesa desde la URL
-const params = new URLSearchParams(window.location.search);
-const mesaId = params.get("id");  // <--- esto toma el ID como mesa1, mesa2, etc.
+// Función asincrónica para cambiar el estado de la mesa
+async function activarMesa() {
+  const params = new URLSearchParams(window.location.search);
+  const mesaId = params.get("id");  // <--- esto toma el ID como mesa1, mesa2, etc.
 
-if (mesaId) {
-  // Cambiar el estado de esa mesa a "ocupada"
-  await setDoc(doc(db, "mesas", mesaId), { estado: "ocupada" });
-  alert(`¡Mesa ${mesaId} activada con éxito!`);
-} else {
-  alert("No se especificó ninguna mesa en la URL.");
+  if (mesaId) {
+    // Cambiar el estado de esa mesa a "ocupada"
+    await setDoc(doc(db, "mesas", mesaId), { estado: "ocupada" });
+    alert(`¡Mesa ${mesaId} activada con éxito!`);
+  } else {
+    alert("No se especificó ninguna mesa en la URL.");
+  }
 }
+
+// Llamar a la función al cargar la página
+window.onload = activarMesa;
