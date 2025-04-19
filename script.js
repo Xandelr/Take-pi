@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -11,45 +11,47 @@ const firebaseConfig = {
   appId: "1:81758083824:web:1156ba4749288a73928035"
 };
 
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Esperamos a que el contenido esté completamente cargado
-window.onload = async function() {
+// Función para cargar las mesas
+async function cargarMesas() {
   const contenedor = document.getElementById("contenedorMesas");
+
+  // Definir número de pisos y mesas por piso
   const pisos = 2;
   const mesasPorPiso = 10;
-  const mesasPorFila = 5; // 5 mesas por fila
 
-  // Creamos los pisos y las mesas
   for (let piso = 1; piso <= pisos; piso++) {
     const pisoContenedor = document.createElement("div");
     pisoContenedor.classList.add("piso");
     contenedor.appendChild(pisoContenedor);
 
-    // Título del piso
     const tituloPiso = document.createElement("h2");
     tituloPiso.innerText = `Piso ${piso}`;
     pisoContenedor.appendChild(tituloPiso);
 
-    // Dividimos las mesas en dos filas
+    // Crear filas de 5 mesas
     for (let fila = 0; fila < 2; fila++) {
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
       pisoContenedor.appendChild(filaContenedor);
 
-      for (let mesa = 1; mesa <= mesasPorFila; mesa++) {
-        const numeroFormateado = (fila * mesasPorFila + mesa).toString().padStart(2, '0');
-        const id = `piso${piso}-mesa${numeroFormateado}`;
-
-        // Crear elemento de mesa
+      for (let mesa = 1; mesa <= 5; mesa++) {
+        const numeroMesa = (fila * 5 + mesa).toString().padStart(2, '0');
+        const mesaId = `piso${piso}-mesa${numeroMesa}`;
+        
+        // Crear el div de la mesa
         const mesaElemento = document.createElement("div");
         mesaElemento.classList.add("mesa");
-        mesaElemento.innerText = `Mesa ${numeroFormateado}`;
+        mesaElemento.innerText = `Mesa ${numeroMesa}`;
         filaContenedor.appendChild(mesaElemento);
 
         // Obtener el estado de la mesa desde Firestore
-        const mesaDoc = await getDoc(doc(db, "mesas", id));
+        const mesaRef = doc(db, "mesas", mesaId);
+        const mesaDoc = await getDoc(mesaRef);
+
         if (mesaDoc.exists()) {
           const estado = mesaDoc.data().estado;
           if (estado === "ocupada") {
@@ -59,16 +61,7 @@ window.onload = async function() {
       }
     }
   }
-};
-
-// Función para ocupar una mesa
-async function ocuparMesa(id) {
-  await setDoc(doc(db, "mesas", id), { estado: "ocupada" });
-  console.log(`Mesa ${id} ocupada`);
 }
 
-// Función para liberar una mesa
-async function liberarMesa(id) {
-  await setDoc(doc(db, "mesas", id), { estado: "libre" });
-  console.log(`Mesa ${id} liberada`);
-}
+// Llamar la función para cargar las mesas cuando la página esté cargada
+window.onload = cargarMesas;
