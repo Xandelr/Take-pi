@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
-// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
   authDomain: "takepi-314.firebaseapp.com",
@@ -11,20 +10,15 @@ const firebaseConfig = {
   appId: "1:81758083824:web:1156ba4749288a73928035"
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Función asíncrona para liberar la mesa
 window.onload = async function() {
-  const params = new URLSearchParams(window.location.search);
-  const mesaId = params.get("id");
+  const urlParams = new URLSearchParams(window.location.search);
+  const mesaId = urlParams.get('id');
+  const mesaRef = doc(db, "mesas", mesaId);
 
-  if (mesaId) {
-    try {
-      // Cambiar el estado de la mesa a "libre"
-      await setDoc(doc(db, "mesas", mesaId), { estado: "libre" });
-      alert(`¡Mesa ${mesaId} liberada con éxito!`);
-    } catch (error) {
-      console.error("Error al liberar la mesa:", error);
-      alert("Hubo un error al liberar
+  // Cambiar el estado de la mesa a "libre"
+  await setDoc(mesaRef, { estado: "libre" });
+  alert(`¡Mesa ${mesaId} liberada!`);
+}
