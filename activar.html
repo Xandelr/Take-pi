@@ -21,11 +21,16 @@
     const db = getFirestore(app);
 
     window.onload = async function() {
+      // Obtener el ID de la mesa desde la URL
       const urlParams = new URLSearchParams(window.location.search);
       const mesaId = urlParams.get('id');
+
+      // Referencia a la mesa en Firestore
       const mesaRef = doc(db, "mesas", mesaId);
 
+      // Actualizar el estado de la mesa a "ocupada"
       await setDoc(mesaRef, { estado: "ocupada" });
+      
       alert("¡Mesa activada correctamente!");
       window.location.href = "index.html"; // Redirige a la página principal para ver los cambios
     }
