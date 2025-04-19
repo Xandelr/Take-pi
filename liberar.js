@@ -15,14 +15,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Obtener el ID de la mesa desde la URL
-const params = new URLSearchParams(window.location.search);
-const mesaId = params.get("id");
+// Función asíncrona para liberar la mesa
+window.onload = async function() {
+  const params = new URLSearchParams(window.location.search);
+  const mesaId = params.get("id");
 
-if (mesaId) {
-  // Cambiar el estado de la mesa a "libre"
-  await setDoc(doc(db, "mesas", mesaId), { estado: "libre" });
-  alert(`¡Mesa ${mesaId} liberada con éxito!`);
-} else {
-  alert("No se especificó ninguna mesa en la URL.");
-}
+  if (mesaId) {
+    try {
+      // Cambiar el estado de la mesa a "libre"
+      await setDoc(doc(db, "mesas", mesaId), { estado: "libre" });
+      alert(`¡Mesa ${mesaId} liberada con éxito!`);
+    } catch (error) {
+      console.error("Error al liberar la mesa:", error);
+      alert("Hubo un error al liberar
