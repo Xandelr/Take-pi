@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:81758083824:web:1156ba4749288a73928035"
 };
 
-// Inicializa Firebase
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -57,6 +57,9 @@ async function cargarMesas() {
           if (estado === "ocupada") {
             mesaElemento.classList.add("ocupada");
           }
+        } else {
+          // Si la mesa no existe, tal vez quieras agregarla como "libre" por defecto
+          console.log(`La mesa ${mesaId} no existe en Firestore.`);
         }
       }
     }
