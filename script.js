@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -46,13 +46,22 @@ async function cargarMesas() {
         mesaElemento.classList.add("mesa");
         mesaElemento.textContent = `Mesa ${numeroMesa}`;
 
-        // Consulta estado en Firestore
+        // Consulta estado en Firestore y escucha cambios en tiempo real
         const mesaRef = doc(db, "mesas", mesaId);
-        const mesaDoc = await getDoc(mesaRef);
 
-        if (mesaDoc.exists() && mesaDoc.data().estado === "ocupada") {
-          mesaElemento.classList.add("ocupada");
-        }
+        // Añadir un listener para actualizaciones en tiempo real
+        onSnapshot(mesaRef, (mesaDoc) => {
+          if (mesaDoc.exists()) {
+            const estado = mesaDoc.data().estado;
+            if (estado === "ocupada") {
+              mesaElemento.classList.add("ocupada");
+              mesaElemento.classList.remove("libre");
+            } else {
+              mesaElemento.classList.add("libre");
+              mesaElemento.classList.remove("ocupada");
+            }
+          }
+        });
 
         filaContenedor.appendChild(mesaElemento);
       }
