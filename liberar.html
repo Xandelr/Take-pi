@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Liberar Mesa</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
@@ -20,28 +20,24 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.onload = async function () {
+    window.onload = async function() {
       const urlParams = new URLSearchParams(window.location.search);
-      const mesaId = urlParams.get('id');
+      const mesaId = urlParams.get('id');  // Obtiene el ID de la mesa desde la URL
 
-      if (!mesaId) {
-        alert("No se especificó ninguna mesa.");
-        return;
-      }
-
-      try {
+      if (mesaId) {
         const mesaRef = doc(db, "mesas", mesaId);
+
+        // Cambiar el estado de la mesa a "libre"
         await setDoc(mesaRef, { estado: "libre" });
-        alert(`¡Mesa ${mesaId} liberada correctamente!`);
-      } catch (error) {
-        console.error("Error al liberar la mesa:", error);
-        alert("Hubo un error al liberar la mesa.");
+        alert(`¡Mesa ${mesaId} liberada!`);
+      } else {
+        alert("No se especificó ninguna mesa en la URL.");
       }
-    };
+    }
   </script>
 </head>
 <body>
-  <h1>Liberando mesa...</h1>
-  <p>Revisa el estado en la página principal.</p>
+  <h1>Liberando la mesa...</h1>
+  <p>Verifica el estado en la base de datos o recarga la página de las mesas.</p>
 </body>
 </html>
