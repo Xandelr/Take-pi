@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -43,27 +43,51 @@ async function cargarMesas() {
         mesaElemento.classList.add("mesa");
         mesaElemento.innerText = `Mesa ${numeroMesa}`;
 
-        const activarLink = document.createElement("a");
-        activarLink.href = `activar.html?id=${mesaId}`;
-        activarLink.innerText = "Activar";
-        activarLink.classList.add("link-activar");
-        activarLink.style.display = "block";
+        // Crear el enlace para activar o liberar dependiendo del estado
+        const link = document.createElement("a");
+        link.href = "#";
+        link.classList.add("link-accion");
+        link.innerText = "Cambiar estado";
 
-        const liberarLink = document.createElement("a");
-        liberarLink.href = `liberar.html?id=${mesaId}`;
-        liberarLink.innerText = "Liberar";
-        liberarLink.classList.add("link-liberar");
-        liberarLink.style.display = "block";
+        // Acciones para cambiar el estado
+        link.addEventListener("click", async function (event) {
+          event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
 
-        mesaElemento.appendChild(activarLink);
-        mesaElemento.appendChild(liberarLink);
+          // Obtener el estado actual de la mesa
+          const mesaRef = doc(db, "mesas", mesaId);
+          const mesaDoc = await getDoc(mesaRef);
+
+          if (mesaDoc.exists()) {
+            const estado = mesaDoc.data().estado;
+            if (estado === "ocupada") {
+              // Liberar la mesa
+              await updateDoc(mesaRef, { estado: "libre" });
+              mesaElemento.classList.remove("ocupada");
+              alert(`¡Mesa ${numeroMesa} liberada!`);
+            } else {
+              // Activar la mesa (marcarla como ocupada)
+              await updateDoc(mesaRef, { estado: "ocupada" });
+              mesaElemento.classList.add("ocupada");
+              alert(`¡Mesa ${numeroMesa} ocupada!`);
+            }
+          } else {
+            console.log(`La mesa ${mesaId} no existe en Firestore.`);
+          }
+        });
+
+        mesaElemento.appendChild(link);
         filaContenedor.appendChild(mesaElemento);
+      }
 
-        const mesaRef = doc(db, "mesas", mesaId);
-        const mesaDoc = await getDoc(mesaRef);
+      pisoContenedor.appendChild(filaContenedor);
+    }
 
-        if (mesaDoc.exists()) {
-          const estado = mesaDoc.data().estado;
-          if (estado === "ocupada") {
-            mesaElemento.classList.add("ocupada");
-            activarLink.style.display = "none";
+    contenedor.appendChild(pisoContenedor);
+  }
+}
+
+// Cargar las mesas al inicio y actualizar cada 5 segundos
+window.onload = () => {
+  cargarMesas();
+  setInterval(cargarMesas, 5000);
+};
