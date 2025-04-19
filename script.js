@@ -18,7 +18,7 @@ const db = getFirestore(app);
 // Función para cargar las mesas
 async function cargarMesas() {
   const contenedor = document.getElementById("contenedorMesas");
-  contenedor.innerHTML = ""; // Limpiar el contenedor antes de volver a cargar
+  contenedor.innerHTML = ""; // Limpiar para volver a construir
 
   const pisos = 2;
   const mesasPorPiso = 10;
@@ -26,7 +26,6 @@ async function cargarMesas() {
   for (let piso = 1; piso <= pisos; piso++) {
     const pisoContenedor = document.createElement("div");
     pisoContenedor.classList.add("piso");
-    contenedor.appendChild(pisoContenedor);
 
     const tituloPiso = document.createElement("h2");
     tituloPiso.innerText = `Piso ${piso}`;
@@ -35,7 +34,6 @@ async function cargarMesas() {
     for (let fila = 0; fila < 2; fila++) {
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
-      pisoContenedor.appendChild(filaContenedor);
 
       for (let mesa = 1; mesa <= 5; mesa++) {
         const numeroMesa = (fila * 5 + mesa).toString().padStart(2, '0');
@@ -59,7 +57,6 @@ async function cargarMesas() {
 
         mesaElemento.appendChild(activarLink);
         mesaElemento.appendChild(liberarLink);
-
         filaContenedor.appendChild(mesaElemento);
 
         const mesaRef = doc(db, "mesas", mesaId);
@@ -70,22 +67,3 @@ async function cargarMesas() {
           if (estado === "ocupada") {
             mesaElemento.classList.add("ocupada");
             activarLink.style.display = "none";
-          } else {
-            liberarLink.style.display = "none";
-          }
-        } else {
-          liberarLink.style.display = "none";
-          console.log(`La mesa ${mesaId} no existe en Firestore.`);
-        }
-      }
-    }
-  }
-}
-
-// Cargar las mesas al inicio
-window.onload = () => {
-  cargarMesas();
-
-  // Refrescar cada 5 segundos
-  setInterval(cargarMesas, 5000);
-};
