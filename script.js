@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:81758083824:web:1156ba4749288a73928035"
 };
 
-// Inicializar Firebase
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -46,25 +46,9 @@ async function cargarMesas() {
         const mesaElemento = document.createElement("div");
         mesaElemento.classList.add("mesa");
         mesaElemento.innerText = `Mesa ${numeroMesa}`;
-        filaContenedor.appendChild(mesaElemento);
-
-        // Obtener el estado de la mesa desde Firestore
-        const mesaRef = doc(db, "mesas", mesaId);
-        const mesaDoc = await getDoc(mesaRef);
-
-        if (mesaDoc.exists()) {
-          const estado = mesaDoc.data().estado;
-          if (estado === "ocupada") {
-            mesaElemento.classList.add("ocupada");
-          }
-        } else {
-          // Si la mesa no existe, tal vez quieras agregarla como "libre" por defecto
-          console.log(`La mesa ${mesaId} no existe en Firestore.`);
-        }
-      }
-    }
-  }
-}
-
-// Llamar la función para cargar las mesas cuando la página esté cargada
-window.onload = cargarMesas;
+        
+        // Crear los enlaces para activar y liberar
+        const activarLink = document.createElement("a");
+        activarLink.href = `activar.html?id=${mesaId}`;
+        activarLink.innerText = "Activar";
+        activarLink.class
