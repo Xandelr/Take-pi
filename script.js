@@ -18,8 +18,8 @@ const db = getFirestore(app);
 // Función para cargar las mesas
 async function cargarMesas() {
   const contenedor = document.getElementById("contenedorMesas");
+  contenedor.innerHTML = ""; // Limpiar el contenedor antes de volver a cargar
 
-  // Definir número de pisos y mesas por piso
   const pisos = 2;
   const mesasPorPiso = 10;
 
@@ -32,7 +32,6 @@ async function cargarMesas() {
     tituloPiso.innerText = `Piso ${piso}`;
     pisoContenedor.appendChild(tituloPiso);
 
-    // Crear filas de 5 mesas
     for (let fila = 0; fila < 2; fila++) {
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
@@ -41,14 +40,52 @@ async function cargarMesas() {
       for (let mesa = 1; mesa <= 5; mesa++) {
         const numeroMesa = (fila * 5 + mesa).toString().padStart(2, '0');
         const mesaId = `piso${piso}-mesa${numeroMesa}`;
-        
-        // Crear el div de la mesa
+
         const mesaElemento = document.createElement("div");
         mesaElemento.classList.add("mesa");
         mesaElemento.innerText = `Mesa ${numeroMesa}`;
-        
-        // Crear los enlaces para activar y liberar
+
         const activarLink = document.createElement("a");
         activarLink.href = `activar.html?id=${mesaId}`;
         activarLink.innerText = "Activar";
-        activarLink.class
+        activarLink.classList.add("link-activar");
+        activarLink.style.display = "block";
+
+        const liberarLink = document.createElement("a");
+        liberarLink.href = `liberar.html?id=${mesaId}`;
+        liberarLink.innerText = "Liberar";
+        liberarLink.classList.add("link-liberar");
+        liberarLink.style.display = "block";
+
+        mesaElemento.appendChild(activarLink);
+        mesaElemento.appendChild(liberarLink);
+
+        filaContenedor.appendChild(mesaElemento);
+
+        const mesaRef = doc(db, "mesas", mesaId);
+        const mesaDoc = await getDoc(mesaRef);
+
+        if (mesaDoc.exists()) {
+          const estado = mesaDoc.data().estado;
+          if (estado === "ocupada") {
+            mesaElemento.classList.add("ocupada");
+            activarLink.style.display = "none";
+          } else {
+            liberarLink.style.display = "none";
+          }
+        } else {
+          liberarLink.style.display = "none";
+          console.log(`La mesa ${mesaId} no existe en Firestore.`);
+        }
+      }
+    }
+  }
+}
+
+// Cargar las mesas al inicio
+window.onload = () => {
+  cargarMesas();
+
+  // Refrescar cada 5 segundos
+  setInterval(cargarMesas, 5000);
+};
