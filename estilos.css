@@ -1,7 +1,7 @@
 /* Estilo general de la página */
 body {
-  font-family: 'Bebas Neue', sans-serif
-  background-color: #abc9c 
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
