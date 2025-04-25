@@ -62,7 +62,7 @@ body {
 }
 
 .mesa.ocupada {
-  background-color: blue;
+  background-color: red;
 }
 
 .mesa:hover {
