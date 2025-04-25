@@ -1,7 +1,7 @@
 /* Estilo general de la página */
 body {
-  font-family: 'Impact', fantasy
-  background-color: #1abc9c
+  font-family: 'Bebas Neue', sans-serif
+  background-color: #abc9c 
   display: flex;
   justify-content: center;
   align-items: center;
