@@ -1,7 +1,7 @@
 /* Estilo general de la página */
 body {
   font-family: 'Impact', fantasy
-  background-color: #80000;
+  background-color: #1abc9c
   display: flex;
   justify-content: center;
   align-items: center;
