@@ -1,7 +1,7 @@
 /* Estilo general de la página */
 body {
   font-family:'Poppins', sans-serif;
-  background-color: #F0F0F0;
+  background-color: #D0F5E1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +24,7 @@ body {
   border: 2px solid #333;
   padding: 10px;
   border-radius: 10px;
-  background-color: #F5DEB3; 
+  background-color: #F0F0F0; 
 }
 
 /* Título del piso */
