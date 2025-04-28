@@ -19,7 +19,7 @@ const db = getFirestore(app);
 async function cargarMesas() {
   const contenedor = document.getElementById("contenedorMesas");
 
-  const pisos = 2;
+  const pisos = 3;
   const mesasPorPiso = 10;
 
   for (let piso = 1; piso <= pisos; piso++) {
