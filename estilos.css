@@ -24,7 +24,10 @@ body {
   border: 2px solid #333;
   padding: 10px;
   border-radius: 10px;
-  background-color: #FFC0CB;
+  background-image: url(https://construccion.usm.cl/wp-content/uploads/2021/06/logo-usm.png)
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Título del piso */
