@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Estado de las Mesas</title>
-  <script type="module" src="script.js" defer></script>
-  <link rel="stylesheet" href="estilos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de las Mesas</title>
+    <script type="module" src="script.js" defer></script>
+    <link rel="stylesheet" href="estilos.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
 </head>
 <body>
-  <h1>Estado de las Mesas</h1>
-  
-  <!-- Aquí se muestra la temperatura general -->
-  <p>Temperatura general: <span id="temp-general">Cargando...</span></p>
+    <h1>Estado de las Mesas</h1>
+    <p>Temperatura general: <span id="temp-general">Cargando...</span></p>
 
-  <div id="contenedorMesas">
-    <!-- Aquí se generarán las mesas por piso -->
-  </div>
+    <div id="contenedorMesas">
+    </div>
 
-  <!-- Script para obtener la temperatura desde Google Sheets -->
-  <script>
+    <script>
     async function obtenerTemperatura() {
       try {
-        const res = await fetch("TU_URL_DEL_SCRIPT_WEB_APP"); // ← Reemplaza con tu URL
+        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1");
         const data = await res.json();
-        const temp = parseFloat(data.temperatura);
-        if (!isNaN(temp)) {
-          document.getElementById("temp-general").textContent = temp.toFixed(1) + " °C";
+        if (data.length > 0) {
+          const ultimaFila = data[data.length - 1];
+          const temp = parseFloat(ultimaFila.temperatura);
+          if (!isNaN(temp)) {
+            document.getElementById("temp-general").textContent = temp.toFixed(1) + " °C";
+          } else {
+            document.getElementById("temp-general").textContent = "Dato inválido";
+          }
         } else {
-          document.getElementById("temp-general").textContent = "Dato inválido";
+          document.getElementById("temp-general").textContent = "No hay datos";
         }
       } catch (error) {
         console.error("Error al obtener la temperatura:", error);
         document.getElementById("temp-general").textContent = "Error";
       }
     }
-
     obtenerTemperatura();
-    setInterval(obtenerTemperatura, 60000); // cada 60 segundos
-  </script>
+    setInterval(obtenerTemperatura, 60000);
+    </script>
 </body>
 </html>
+```
