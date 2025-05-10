@@ -6,19 +6,76 @@
   <title>Estado de las Mesas</title>
   <script type="module" src="script.js" defer></script>
   <link rel="stylesheet" href="estilos.css" />
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    // ID de tu hoja de Google Sheets
+    const SPREADSHEET_ID = 'AKfycbyeXSFIHyiyKSXHHSTj7JEKK2gKGZ3MrV1C_soF-5BJ2fjIWv4dQ5-Vqb3FvcZFEm8b';
+    const RANGE = 'Hoja1!A2:C';  // Ajusta el rango a donde tengas los datos
+
+    function loadClient() {
+      gapi.client.setApiKey('TU_CLAVE_DE_API_GOOGLE');  // Sustituye por tu clave de API
+      return gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
+    }
+
+    // Función para obtener los datos de la hoja de cálculo
+    function getData() {
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: RANGE
+      }).then((response) => {
+        const data = response.result.values;
+        if (data && data.length > 0) {
+          // Obtenemos la última fila, donde está la última temperatura
+          const lastRow = data[data.length - 1];
+          const temp = lastRow[1];  // Suponiendo que la temperatura está en la columna B
+
+          // Mostrar la temperatura en la página web
+          const tempElement = document.getElementById('temp-piso');
+          tempElement.textContent = `Última Temperatura: ${temp} °C`;
+        } else {
+          console.log("No hay datos disponibles.");
+        }
+      });
+    }
+
+    // Inicia el cliente de la API de Google
+    function start() {
+      gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+      loadClient().then(() => {
+        getData();
+      });
+    }
+  </script>
 </head>
-<body>
+<body onload="start()">
   <h1>Estado de las Mesas</h1>
   
   <div id="contenedorMesas">
     <!-- Aquí se generarán las mesas por piso -->
+    <!-- Piso 1 -->
+    <div id="piso1" class="piso">
+      <h2>Piso 1</h2>
+      <p>Temperatura actual: <span id="temp-piso">Cargando...</span>°C</p>
+      <!-- Aquí irán las mesas del piso 1 -->
+    </div>
+
+    <!-- Piso 2 -->
+    <div id="piso2" class="piso">
+      <h2>Piso 2</h2>
+      <p>Temperatura actual: <span id="temp-piso">Cargando...</span>°C</p>
+      <!-- Aquí irán las mesas del piso 2 -->
+    </div>
 
     <!-- Piso 3 -->
     <div id="piso3" class="piso">
-      <h2>Piso 2</h2>
-      <p>Temperatura actual: <span id="temp-piso2">Cargando...</span>°C</p>
-      <!-- Aquí pueden ir las mesas del piso 2 -->
+      <h2>Piso 3</h2>
+      <p>Temperatura actual: <span id="temp-piso">Cargando...</span>°C</p>
+      <!-- Aquí irán las mesas del piso 3 -->
     </div>
   </div>
+
 </body>
 </html>
