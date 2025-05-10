@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js"; // Para Realtime Database
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -72,6 +73,17 @@ async function cargarMesas() {
     pisoContenedor.appendChild(filasContenedor);
     contenedor.appendChild(pisoContenedor);
   }
+
+  // Mostrar la temperatura del piso 3
+  const tempRef = ref(getDatabase(), "pisos/piso3/temperatura");
+
+  onValue(tempRef, (snapshot) => {
+    const temp = snapshot.val();
+    const tempPiso3 = document.getElementById("temp-piso3");
+    if (tempPiso3) {
+      tempPiso3.textContent = temp !== null ? temp.toFixed(1) : "N/A";
+    }
+  });
 }
 
 // Cargar mesas al iniciar la página
