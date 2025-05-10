@@ -103,7 +103,7 @@ function getData() {
 
 // Función para cargar el cliente de Google API
 function loadClient() {
-  gapi.client.setApiKey('TU_CLAVE_DE_API_GOOGLE');  // Aquí debes reemplazar con tu propia clave de API de Google
+  gapi.client.setApiKey('AIzaSyCtJGMuXjHXMpt_pi95LReusGAlHEgeKWU');  // Aquí debes reemplazar con tu propia clave de API de Google
   return gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
 }
 
