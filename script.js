@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -15,14 +15,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Función para cargar las mesas desde Firestore
+// Función para cargar las mesas
 async function cargarMesas() {
   const contenedor = document.getElementById("contenedorMesas");
 
   const pisos = 3;
   const mesasPorPiso = 10;
 
-  // Cargar mesas por cada piso
   for (let piso = 1; piso <= pisos; piso++) {
     const pisoContenedor = document.createElement("div");
     pisoContenedor.classList.add("piso");
@@ -34,7 +33,6 @@ async function cargarMesas() {
     const filasContenedor = document.createElement("div");
     filasContenedor.classList.add("filas");
 
-    // Cargar mesas en cada fila del piso
     for (let fila = 0; fila < 2; fila++) {
       const filaContenedor = document.createElement("div");
       filaContenedor.classList.add("fila");
@@ -50,18 +48,11 @@ async function cargarMesas() {
 
         // Consulta estado en Firestore y escucha cambios en tiempo real
         const mesaRef = doc(db, "mesas", mesaId);
-
-        // Añadir un listener para actualizaciones en tiempo real
         onSnapshot(mesaRef, (mesaDoc) => {
           if (mesaDoc.exists()) {
             const estado = mesaDoc.data().estado;
-            if (estado === "ocupada") {
-              mesaElemento.classList.add("ocupada");
-              mesaElemento.classList.remove("libre");
-            } else {
-              mesaElemento.classList.add("libre");
-              mesaElemento.classList.remove("ocupada");
-            }
+            mesaElemento.classList.toggle("ocupada", estado === "ocupada");
+            mesaElemento.classList.toggle("libre", estado !== "ocupada");
           }
         });
 
@@ -76,48 +67,28 @@ async function cargarMesas() {
   }
 }
 
-// Función para obtener la temperatura desde Google Sheets
-function getData() {
-  const SPREADSHEET_ID = 'AKfycbyeXSFIHyiyKSXHHSTj7JEKK2gKGZ3MrV1C_soF-5BJ2fjIWv4dQ5-Vqb3FvcZFEm8b'; // ID de tu hoja de cálculo
-  const RANGE = 'Hoja1!A2:C';  // Ajusta el rango de las celdas que contienen los datos
-
-  // Usamos la API de Google Sheets para obtener los datos
-  gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: RANGE
-  }).then((response) => {
-    const data = response.result.values;
-    if (data && data.length > 0) {
-      // Obtener el último valor de la temperatura (última fila)
-      const lastRow = data[data.length - 1];
-      const temp = lastRow[1];  // Suponiendo que la temperatura está en la columna B
-
-      // Mostrar la temperatura en el HTML
-      const tempElement = document.getElementById('temp-piso');
-      tempElement.textContent = `Última Temperatura: ${temp} °C`;
-    } else {
-      console.log("No se encontraron datos.");
-    }
-  });
+// Función para actualizar temperatura desde hoja de cálculo
+function actualizarTemperatura() {
+  fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1")
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        const ultimaFila = data[data.length - 1];
+        const temperatura = parseFloat(ultimaFila.temperatura);
+        const tempElemento = document.getElementById("temp-piso2");
+        if (tempElemento && !isNaN(temperatura)) {
+          tempElemento.textContent = temperatura.toFixed(1) + "°C";
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Error al obtener la temperatura:", error);
+    });
 }
 
-// Función para cargar el cliente de Google API
-function loadClient() {
-  gapi.client.setApiKey('AIzaSyCtJGMuXjHXMpt_pi95LReusGAlHEgeKWU');  // Aquí debes reemplazar con tu propia clave de API de Google
-  return gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
-}
-
-// Función para iniciar la API
-function start() {
-  gapi.load('client:auth2', initClient);
-}
-
-// Función de inicialización
-function initClient() {
-  loadClient().then(() => {
-    getData();  // Llamada para obtener los datos de la hoja de cálculo
-  });
-}
-
-// Cargar mesas al iniciar la página
-window.onload = cargarMesas;
+// Cargar mesas y temperatura al iniciar
+window.onload = () => {
+  cargarMesas();
+  actualizarTemperatura();
+  setInterval(actualizarTemperatura, 60000); // Actualiza cada 60 segundos
+};
