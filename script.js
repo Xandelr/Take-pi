@@ -67,7 +67,7 @@ async function cargarMesas() {
   }
 }
 
-// Función para actualizar temperatura desde hoja de cálculo
+// Función para actualizar temperatura desde la hoja de cálculo
 function actualizarTemperatura() {
   fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1")
     .then(response => response.json())
