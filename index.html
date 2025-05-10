@@ -16,5 +16,27 @@
   <div id="contenedorMesas">
     <!-- Aquí se generarán las mesas por piso -->
   </div>
+
+  <!-- Script para obtener la temperatura desde Google Sheets -->
+  <script>
+    async function obtenerTemperatura() {
+      try {
+        const res = await fetch("TU_URL_DEL_SCRIPT_WEB_APP"); // ← Reemplaza con tu URL
+        const data = await res.json();
+        const temp = parseFloat(data.temperatura);
+        if (!isNaN(temp)) {
+          document.getElementById("temp-general").textContent = temp.toFixed(1) + " °C";
+        } else {
+          document.getElementById("temp-general").textContent = "Dato inválido";
+        }
+      } catch (error) {
+        console.error("Error al obtener la temperatura:", error);
+        document.getElementById("temp-general").textContent = "Error";
+      }
+    }
+
+    obtenerTemperatura();
+    setInterval(obtenerTemperatura, 60000); // cada 60 segundos
+  </script>
 </body>
 </html>
