@@ -5,7 +5,7 @@ from time import sleep
 import bmp280
 
 # Inicializa Firebase
-cred = credentials.Certificate('path/to/your/serviceAccountKey.json')  # Asegúrate de tener la clave de servicio
+cred = credentials.Certificate("C:\Users\cecer\Downloads\takepi-314-firebase-adminsdk-fbsvc-782a65dd10.json")  
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://takepi-314.firebaseio.com/'
 })
@@ -21,7 +21,7 @@ while True:
     print("Temperatura: {:.2f} °C".format(temperatura))
 
     # Subir la temperatura a Firebase
-    ref = db.reference('pisos/piso3/temperatura')  # Ruta en tu base de datos de Firebase
+    ref = db.reference('pisos/piso3/temperatura') 
     ref.set(temperatura)
 
     sleep(60)  # Enviar cada 60 segundos (ajusta el intervalo según lo necesites)
