@@ -53,16 +53,51 @@ async function cargarMesas() {
                         mesaElemento.classList.toggle("ocupada", estado === "ocupada");
                         mesaElemento.classList.toggle("libre", estado !== "ocupada");
                     } else {
-                      mesaElemento.classList.add("libre");
+                        mesaElemento.classList.add("libre");
                     }
                 });
 
                 filaContenedor.appendChild(mesaElemento);
             }
             filasContenedor.appendChild(filaContenedor);
+            pisoContenedor.appendChild(filasContenedor);
+            contenedor.appendChild(pisoContenedor);
         }
-        pisoContenedor.appendChild(filasContenedor);
-        contenedor.appendChild(pisoContenedor);
+    }
+}
+
+// Función para obtener la temperatura general desde la hoja de cálculo
+async function obtenerTemperatura() {
+    try {
+        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1");
+        if (!res.ok) {
+            throw new Error(`Error al obtener datos: ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+
+        // Verificar si data es un array y tiene elementos
+        if (Array.isArray(data) && data.length > 0) {
+            const ultimaFila = data[data.length - 1];
+            // Verificar si ultimaFila tiene las propiedades 'temperatura' y 'fecha'
+            if (ultimaFila && typeof ultimaFila.temperatura !== 'undefined' && typeof ultimaFila.fecha !== 'undefined') {
+                const temperatura = parseFloat(ultimaFila.temperatura);
+                const tempElemento = document.getElementById("temp-general");
+                if (tempElemento && !isNaN(temperatura)) {
+                    tempElemento.textContent = temperatura.toFixed(1) + " °C";
+                } else {
+                    tempElemento.textContent = "Dato inválido";
+                }
+            }
+             else {
+                console.error("Error: La última fila no contiene 'temperatura' o 'fecha'", ultimaFila);
+                document.getElementById("temp-general").textContent = "Error de datos";
+             }
+        } else {
+            document.getElementById("temp-general").textContent = "No hay datos";
+        }
+    } catch (error) {
+        console.error("Error al obtener la temperatura:", error);
+        document.getElementById("temp-general").textContent = "Error";
     }
 }
 
@@ -72,26 +107,3 @@ window.onload = () => {
     obtenerTemperatura();
     setInterval(obtenerTemperatura, 60000); // Actualiza cada 60 segundos
 };
-
-// Función para obtener la temperatura general desde la hoja de cálculo
-async function obtenerTemperatura() {
-    try {
-        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja 1");
-        const data = await res.json();
-        if (data.length > 0) {
-            const ultimaFila = data[data.length - 1];
-            const temperatura = parseFloat(ultimaFila.temperatura);
-            const tempElemento = document.getElementById("temp-general");
-            if (tempElemento && !isNaN(temperatura)) {
-                tempElemento.textContent = temperatura.toFixed(1) + " °C";
-            } else {
-                tempElemento.textContent = "Dato inválido";
-            }
-        } else {
-            tempElemento.textContent = "No hay datos";
-        }
-    } catch (error) {
-        console.error("Error al obtener la temperatura:", error);
-        document.getElementById("temp-general").textContent = "Error";
-    }
-}
