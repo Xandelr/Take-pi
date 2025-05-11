@@ -3,44 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estado de las Mesas</title>
+    <title>Estado de las Mesas y Temperatura</title>
     <script type="module" src="script.js" defer></script>
     <link rel="stylesheet" href="estilos.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <style>
+        /* Estilos existentes... */
+        .mesa.ocupada {
+            background-color: red;
+        }
+        .mesa.libre {
+            background-color: green;
+        }
+    </style>
 </head>
 <body>
-    <h1>Estado de las Mesas</h1>
+    <h1>Estado de las Mesas y Temperatura</h1>
     <p>Temperatura general: <span id="temp-general">Cargando...</span></p>
 
     <div id="contenedorMesas">
-    </div>
+        </div>
 
     <script>
-    async function obtenerTemperatura() {
-      try {
-        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1");
-        const data = await res.json();
-        if (data.length > 0) {
-          const ultimaFila = data[data.length - 1];
-          const temp = parseFloat(ultimaFila.temperatura);
-          if (!isNaN(temp)) {
-            document.getElementById("temp-general").textContent = temp.toFixed(1) + " °C";
-          } else {
-            document.getElementById("temp-general").textContent = "Dato inválido";
-          }
-        } else {
-          document.getElementById("temp-general").textContent = "No hay datos";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",  // Reemplazar
+            authDomain: "TU_AUTH_DOMAIN", // Reemplazar
+            projectId: "TU_PROJECT_ID", // Reemplazar
+            storageBucket: "TU_STORAGE_BUCKET", // Reemplazar
+            messagingSenderId: "TU_MESSAGING_SENDER_ID", // Reemplazar
+            appId: "TU_APP_ID"  // Reemplazar
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // URL de Google Apps Script
+        const scriptURL = 'TU_URL_DEL_SCRIPT_WEB_APP';  // Reemplazar con la URL de tu script
+
+        async function cargarMesas() {
+            const contenedor = document.getElementById("contenedorMesas");
+            const pisos = 3;
+            const mesasPorPiso = 10;
+
+            for (let piso = 1; piso <= pisos; piso++) {
+                const pisoContenedor = document.createElement("div");
+                pisoContenedor.classList.add("piso");
+
+                const tituloPiso = document.createElement("h2");
+                tituloPiso.textContent = `Piso ${piso}`;
+                pisoContenedor.appendChild(tituloPiso);
+
+                const filasContenedor = document.createElement("div");
+                filasContenedor.classList.add("filas");
+
+                for (let fila = 0; fila < 2; fila++) {
+                    const filaContenedor = document.createElement("div");
+                    filaContenedor.classList.add("fila");
+
+                    for (let i = 1; i <= 5; i++) {
+                        const mesaNumero = fila * 5 + i;
+                        const numeroMesa = mesaNumero.toString().padStart(2, '0');
+                        const mesaId = `piso${piso}-mesa${numeroMesa}`;
+
+                        const mesaElemento = document.createElement("div");
+                        mesaElemento.classList.add("mesa");
+                        mesaElemento.textContent = `Mesa ${numeroMesa}`;
+
+                        // Consulta estado en Firestore y escucha cambios en tiempo real
+                        const mesaRef = doc(db, "mesas", mesaId);
+                        onSnapshot(mesaRef, (mesaDoc) => {
+                            if (mesaDoc.exists()) {
+                                const estado = mesaDoc.data().estado;
+                                mesaElemento.classList.toggle("ocupada", estado === "ocupada");
+                                mesaElemento.classList.toggle("libre", estado !== "ocupada");
+                            } else {
+                                mesaElemento.classList.add("libre");
+                            }
+                        });
+
+                        filaContenedor.appendChild(mesaElemento);
+                    }
+                    filasContenedor.appendChild(filaContenedor);
+                }
+                pisoContenedor.appendChild(filasContenedor);
+                contenedor.appendChild(pisoContenedor);
+            }
         }
-      } catch (error) {
-        console.error("Error al obtener la temperatura:", error);
-        document.getElementById("temp-general").textContent = "Error";
-      }
-    }
-    obtenerTemperatura();
-    setInterval(obtenerTemperatura, 60000);
+
+        async function obtenerTemperatura() {
+            try {
+                const res = await fetch(scriptURL);
+                if (!res.ok) {
+                    throw new Error(`Error al obtener datos: ${res.status} ${res.statusText}`);
+                }
+                const data = await res.json();
+                if (data && data.temperatura !== undefined && data.fecha !== undefined) {
+                    document.getElementById("temp-general").textContent = data.temperatura.toFixed(1) + " °C";
+                } else {
+                    document.getElementById("temp-general").textContent = "Dato inválido";
+                }
+            } catch (error) {
+                console.error("Error al obtener la temperatura:", error);
+                document.getElementById("temp-general").textContent = "Error";
+            }
+        }
+
+        // Cargar mesas y temperatura
+        window.onload = () => {
+            cargarMesas();
+            obtenerTemperatura();
+            setInterval(obtenerTemperatura, 60000); // Actualiza cada 60 segundos
+        };
     </script>
 </body>
 </html>
