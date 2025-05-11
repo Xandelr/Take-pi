@@ -69,7 +69,7 @@ async function cargarMesas() {
 // Función para obtener la temperatura general desde la hoja de cálculo
 async function obtenerTemperatura() {
     try {
-        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1");
+        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja 1");
         if (!res.ok) {
             throw new Error(`Error al obtener datos: ${res.status} ${res.statusText}`);
         }
