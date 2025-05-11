@@ -76,7 +76,7 @@ window.onload = () => {
 // Función para obtener la temperatura general desde la hoja de cálculo
 async function obtenerTemperatura() {
     try {
-        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja1");
+        const res = await fetch("https://opensheet.elk.sh/1z_BT_SQfElGasAfei0jc1Cj-aB_a3WVV4AzdyqpHDnw/Hoja 1");
         const data = await res.json();
         if (data.length > 0) {
             const ultimaFila = data[data.length - 1];
