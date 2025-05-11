@@ -18,18 +18,18 @@ while not wlan.isconnected():
 
 print("Conectado a WiFi, dirección IP:", wlan.ifconfig())
 
-# Inicializar BMP280
+
 i2c = I2C(0, sda=Pin(0), scl=Pin(1))
 sensor = bmp280.BMP280(i2c)
 
-# Webhook URL de Google Apps Script
+
 url = 'https://script.google.com/macros/s/AKfycbwfffVUWQ5FU6ZWMPIl0do7C3EOgdaaLqVKOhykY_xPObQydy_3eGv3jQcflAF7vX_s-A/exec'
 
 while True:
     gc.collect()
     temp = sensor.get_temperature()
 
-    # Formatear fecha
+    
     fecha = time.localtime()
     fecha_str = "{:02d}/{:02d}/{:04d} {:02d}:{:02d}:{:02d}".format(
         fecha[2], fecha[1], fecha[0], fecha[3], fecha[4], fecha[5]
@@ -38,7 +38,7 @@ while True:
     print("Temperatura:", temp)
     print("Fecha:", fecha_str)
 
-    # Crear el cuerpo tipo formulario
+   
     data = "temperatura={}&fecha={}".format(temp, fecha_str)
 
     try:
