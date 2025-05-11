@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
-// Configuración de Firebase
+
 const firebaseConfig = {
     apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
     authDomain: "takepi-314.firebaseapp.com",
@@ -11,11 +11,11 @@ const firebaseConfig = {
     appId: "1:81758083824:web:1156ba4749288a73928035"
 };
 
-// Inicializa Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Función para cargar las mesas
+
 async function cargarMesas() {
     const contenedor = document.getElementById("contenedorMesas");
     const pisos = 5;
@@ -75,7 +75,7 @@ async function obtenerTemperatura() {
         }
         const data = await res.json();
 
-        // Verificar si data es un array y tiene elementos
+        
         if (Array.isArray(data) && data.length > 0) {
             const ultimaFila = data[data.length - 1];
             // Verificar si ultimaFila tiene las propiedades 'temperatura' y 'fecha'
@@ -101,7 +101,7 @@ async function obtenerTemperatura() {
     }
 }
 
-// Cargar mesas y temperatura general al iniciar
+
 window.onload = () => {
     cargarMesas();
     obtenerTemperatura();
