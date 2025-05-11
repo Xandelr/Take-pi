@@ -24,33 +24,63 @@
     <p>Temperatura general: <span id="temp-general">Cargando...</span></p>
 
     <div id="contenedorMesas">
-        </div>
+    </div>
 
     <script>
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-
-        // Configuración de Firebase
-       const firebaseConfig = {
-           apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
-            authDomain: "takepi-314.firebaseapp.com",
-            projectId: "takepi-314",
-            storageBucket: "takepi-314.appspot.com",
-            messagingSenderId: "81758083824",
-            appId: "1:81758083824:web:1156ba4749288a73928035"
-         };
-        
-        // Inicializa Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
         // URL de Google Apps Script
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwfffVUWQ5FU6ZWMPIl0do7C3EOgdaaLqVKOhykY_xPObQydy_3eGv3jQcflAF7vX_s-A/exec';  // Reemplazar con la URL de tu script
+
+        async function obtenerTemperatura() {
+            try {
+                const res = await fetch(scriptURL);
+                if (!res.ok) {
+                    throw new Error(`Error al obtener datos: ${res.status} ${res.statusText}`);
+                }
+                const data = await res.json();
+
+                // Verificar si data es un objeto y tiene las propiedades 'temperatura' y 'fecha'
+                if (data && data.temperatura !== undefined && data.fecha !== undefined) {
+                    document.getElementById("temp-general").textContent = data.temperatura.toFixed(1) + " °C";
+                } else {
+                    console.error("Error: La respuesta del servidor no tiene la estructura esperada:", data);
+                    document.getElementById("temp-general").textContent = "Error de datos";
+                }
+            } catch (error) {
+                console.error("Error al obtener la temperatura:", error);
+                document.getElementById("temp-general").textContent = "Error";
+            }
+        }
+
+        // Cargar mesas y temperatura general al iniciar
+        window.onload = () => {
+            cargarMesas();
+            obtenerTemperatura();
+            setInterval(obtenerTemperatura, 60000); // Actualiza cada 60 segundos
+        };
 
         async function cargarMesas() {
             const contenedor = document.getElementById("contenedorMesas");
             const pisos = 3;
             const mesasPorPiso = 10;
+   
+            // Importar Firebase dentro de la función cargarMesas
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js");
+            const { getFirestore, doc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js");
+
+            // Configuración de Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyBBclR3QgQ2It0sQiQkkLqM_GvLu49nKPQ",
+                authDomain: "takepi-314.firebaseapp.com",
+                projectId: "takepi-314",
+                storageBucket: "takepi-314.appspot.com",
+                messagingSenderId: "81758083824",
+                appId: "1:81758083824:web:1156ba4749288a73928035"
+            };
+
+            // Inicializa Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
 
             for (let piso = 1; piso <= pisos; piso++) {
                 const pisoContenedor = document.createElement("div");
@@ -96,31 +126,6 @@
                 contenedor.appendChild(pisoContenedor);
             }
         }
-
-        async function obtenerTemperatura() {
-            try {
-                const res = await fetch(scriptURL);
-                if (!res.ok) {
-                    throw new Error(`Error al obtener datos: ${res.status} ${res.statusText}`);
-                }
-                const data = await res.json();
-                if (data && data.temperatura !== undefined && data.fecha !== undefined) {
-                    document.getElementById("temp-general").textContent = data.temperatura.toFixed(1) + " °C";
-                } else {
-                    document.getElementById("temp-general").textContent = "Dato inválido";
-                }
-            } catch (error) {
-                console.error("Error al obtener la temperatura:", error);
-                document.getElementById("temp-general").textContent = "Error";
-            }
-        }
-
-        // Cargar mesas y temperatura
-        window.onload = () => {
-            cargarMesas();
-            obtenerTemperatura();
-            setInterval(obtenerTemperatura, 60000); // Actualiza cada 60 segundos
-        };
     </script>
 </body>
 </html>
