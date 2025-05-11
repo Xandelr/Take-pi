@@ -23,7 +23,7 @@ i2c = I2C(0, sda=Pin(0), scl=Pin(1))
 sensor = bmp280.BMP280(i2c)
 
 # Webhook URL de Google Apps Script
-url = 'https://script.google.com/macros/s/AKfycbxLcFQBHFkTahQ0mQHLCYCHaUL6ZlD7K1kpctc9Z1KZio_9YH8VgLrysDNUaVczzcO8Qg/exec'
+url = 'https://script.google.com/macros/s/AKfycbwfffVUWQ5FU6ZWMPIl0do7C3EOgdaaLqVKOhykY_xPObQydy_3eGv3jQcflAF7vX_s-A/exec'
 
 while True:
     gc.collect()
