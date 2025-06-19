@@ -24,7 +24,7 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Hoja 1"); // Asegúrate de que el nombre de la hoja sea correcto
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Hoja 1"); // Asegúrate de que el nombre de la hoja sea correcto importanteee!!!!!!! 
 
     // Verifica que el evento 'e' y sus parámetros existan
     if (e && e.parameter) {
